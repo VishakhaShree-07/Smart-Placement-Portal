@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-tag">Crack Your Dream Placement</div>
         <h1 className="hero-title">
@@ -20,7 +19,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Grid */}
       <section className="features-grid">
         <div className="feature-card glass-card">
           <div className="feature-icon">💻</div>
