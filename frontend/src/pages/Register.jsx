@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  const handleSubmit = (e) => {
+  const { register } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
-    alert(`Registration attempted for: ${name} (${email}). Database is not implemented yet.`);
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      await register(name, email, password);
+      setSuccess('Registration successful! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err) {
+      setError(err.message || 'Registration failed');
+      setLoading(false);
+    }
   };
 
   return (
@@ -23,6 +44,20 @@ const Register = () => {
           <h2 className="auth-title">Create <span className="gradient-text">Account</span></h2>
           <p className="auth-subtitle">Get started with your placement prep journey</p>
         </div>
+
+        {error && (
+          <div className="alert alert-error">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {success && (
+          <div className="alert alert-success">
+            <span>✅</span>
+            <span>{success}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -35,6 +70,7 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -48,6 +84,7 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -61,6 +98,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -74,11 +112,24 @@ const Register = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
-            Register
+          <button 
+            type="submit" 
+            className="btn btn-primary" 
+            style={{ width: '100%', marginTop: '1rem' }}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="spinner" style={{ marginRight: '0.5rem' }}></span>
+                Registering...
+              </>
+            ) : (
+              'Register'
+            )}
           </button>
         </form>
 
