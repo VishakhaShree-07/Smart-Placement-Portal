@@ -1,7 +1,34 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const [stats, setStats] = useState({
+    totalAttempted: 0,
+    latestScore: null,
+    latestTotalQuestions: null,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('/api/quiz/results', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'success') {
+          setStats(data.data.stats);
+        }
+      } catch (err) {
+        console.error('Failed to load quiz statistics:', err);
+      }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <div className="dashboard-container animate-fade-in">
@@ -31,6 +58,27 @@ const Dashboard = () => {
             <span className="value" style={{ textTransform: 'capitalize' }}>
               {user?.role}
             </span>
+          </div>
+        </div>
+
+        <div className="dashboard-card glass-card">
+          <h3>Aptitude Practice Stats</h3>
+          <div className="profile-detail">
+            <span className="label">Quizzes Attempted</span>
+            <span className="value">{stats.totalAttempted}</span>
+          </div>
+          <div className="profile-detail">
+            <span className="label">Latest Quiz Score</span>
+            <span className="value">
+              {stats.latestScore !== null
+                ? `${stats.latestScore} / ${stats.latestTotalQuestions}`
+                : 'No quizzes attempted'}
+            </span>
+          </div>
+          <div style={{ marginTop: '1.5rem' }}>
+            <Link to="/quiz" className="btn btn-primary" style={{ width: '100%', fontSize: '0.9rem', padding: '0.6rem 1rem' }}>
+              Start Practice Quiz
+            </Link>
           </div>
         </div>
 

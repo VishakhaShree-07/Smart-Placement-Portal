@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Quiz from './pages/Quiz';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
@@ -29,6 +30,12 @@ function Navigation() {
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
             >
               Dashboard
+            </NavLink>
+            <NavLink 
+              to="/quiz" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+            >
+              Practice Quiz
             </NavLink>
             <button 
               onClick={logout}
@@ -70,6 +77,7 @@ function AppContent() {
           <Route path="/register" element={<Register />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/quiz" element={<Quiz />} />
           </Route>
         </Routes>
       </main>
