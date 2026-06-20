@@ -4,30 +4,36 @@ import { useAuth } from '../hooks/useAuth';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState({
-    totalAttempted: 0,
-    latestScore: null,
-    latestTotalQuestions: null,
+  const [analytics, setAnalytics] = useState({
+    totalQuizzes: 0,
+    bestScore: 0,
+    averageScore: 0,
+    latestScore: 0,
+    categoryWisePerformance: {
+      aptitude: { attempts: 0, accuracy: 0 },
+      reasoning: { attempts: 0, accuracy: 0 },
+      verbal: { attempts: 0, accuracy: 0 }
+    }
   });
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchAnalytics = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('/api/quiz/results', {
+        const res = await fetch('/api/quiz/analytics', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
         const data = await res.json();
         if (res.ok && data.status === 'success') {
-          setStats(data.data.stats);
+          setAnalytics(data.data);
         }
       } catch (err) {
-        console.error('Failed to load quiz statistics:', err);
+        console.error('Failed to load quiz analytics:', err);
       }
     };
-    fetchStats();
+    fetchAnalytics();
   }, []);
 
   return (
@@ -39,6 +45,46 @@ const Dashboard = () => {
             Welcome back, <span className="gradient-text">{user?.name}</span>
           </h1>
           <p className="dashboard-subtitle">Manage your preparation path and track recruitment milestones.</p>
+        </div>
+      </div>
+
+      <div className="analytics-summary-grid">
+        <div className="analytics-card glass-card">
+          <div className="analytics-icon">📊</div>
+          <div className="analytics-content">
+            <span className="analytics-label">Total Quizzes Attempted</span>
+            <h2 className="analytics-value">{analytics.totalQuizzes}</h2>
+          </div>
+        </div>
+
+        <div className="analytics-card glass-card">
+          <div className="analytics-icon">🏆</div>
+          <div className="analytics-content">
+            <span className="analytics-label">Best Score</span>
+            <h2 className="analytics-value">
+              {analytics.totalQuizzes > 0 ? `${analytics.bestScore}%` : 'N/A'}
+            </h2>
+          </div>
+        </div>
+
+        <div className="analytics-card glass-card">
+          <div className="analytics-icon">📈</div>
+          <div className="analytics-content">
+            <span className="analytics-label">Average Score</span>
+            <h2 className="analytics-value">
+              {analytics.totalQuizzes > 0 ? `${analytics.averageScore}%` : 'N/A'}
+            </h2>
+          </div>
+        </div>
+
+        <div className="analytics-card glass-card">
+          <div className="analytics-icon">⏱️</div>
+          <div className="analytics-content">
+            <span className="analytics-label">Latest Score</span>
+            <h2 className="analytics-value">
+              {analytics.totalQuizzes > 0 ? `${analytics.latestScore}%` : 'N/A'}
+            </h2>
+          </div>
         </div>
       </div>
 
@@ -62,17 +108,23 @@ const Dashboard = () => {
         </div>
 
         <div className="dashboard-card glass-card">
-          <h3>Aptitude Practice Stats</h3>
+          <h3>Topic Performance</h3>
           <div className="profile-detail">
-            <span className="label">Quizzes Attempted</span>
-            <span className="value">{stats.totalAttempted}</span>
+            <span className="label">Aptitude</span>
+            <span className="value">
+              {analytics.categoryWisePerformance?.aptitude?.attempts || 0} attempts ({analytics.categoryWisePerformance?.aptitude?.accuracy || 0}%)
+            </span>
           </div>
           <div className="profile-detail">
-            <span className="label">Latest Quiz Score</span>
+            <span className="label">Reasoning</span>
             <span className="value">
-              {stats.latestScore !== null
-                ? `${stats.latestScore} / ${stats.latestTotalQuestions}`
-                : 'No quizzes attempted'}
+              {analytics.categoryWisePerformance?.reasoning?.attempts || 0} attempts ({analytics.categoryWisePerformance?.reasoning?.accuracy || 0}%)
+            </span>
+          </div>
+          <div className="profile-detail">
+            <span className="label">Verbal Ability</span>
+            <span className="value">
+              {analytics.categoryWisePerformance?.verbal?.attempts || 0} attempts ({analytics.categoryWisePerformance?.verbal?.accuracy || 0}%)
             </span>
           </div>
           <div style={{ marginTop: '1.5rem' }}>
