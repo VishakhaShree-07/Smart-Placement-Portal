@@ -5,6 +5,9 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
 import QuizHistory from './pages/QuizHistory';
+import Companies from './pages/Companies';
+import CompanyDetails from './pages/CompanyDetails';
+import Resources from './pages/Resources';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
@@ -43,6 +46,18 @@ function Navigation() {
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
             >
               Quiz History
+            </NavLink>
+            <NavLink 
+              to="/companies" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+            >
+              Companies
+            </NavLink>
+            <NavLink 
+              to="/resources" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+            >
+              Resources
             </NavLink>
             <button 
               onClick={logout}
@@ -86,6 +101,9 @@ function AppContent() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/history" element={<QuizHistory />} />
+            <Route path="/companies" element={<Companies />} />
+            <Route path="/companies/:id" element={<CompanyDetails />} />
+            <Route path="/resources" element={<Resources />} />
           </Route>
         </Routes>
       </main>

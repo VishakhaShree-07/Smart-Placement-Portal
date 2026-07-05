@@ -4,12 +4,16 @@ import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
+import companyRoutes from './routes/companyRoutes.js';
+import resourceRoutes from './routes/resourceRoutes.js';
 import seedQuiz from './config/seedQuiz.js';
+import seedData from './config/seedData.js';
 
 dotenv.config();
 
 connectDB().then(() => {
   seedQuiz();
+  seedData();
 });
 
 const app = express();
@@ -20,6 +24,8 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/company', companyRoutes);
+app.use('/api/resources', resourceRoutes);
 
 app.get('/api', (req, res) => {
   res.json({

@@ -15,6 +15,8 @@ const Dashboard = () => {
       verbal: { attempts: 0, accuracy: 0 }
     }
   });
+  const [companiesCount, setCompaniesCount] = useState(0);
+  const [resourcesCount, setResourcesCount] = useState(0);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -33,7 +35,24 @@ const Dashboard = () => {
         console.error('Failed to load quiz analytics:', err);
       }
     };
+
+    const fetchCounts = async () => {
+      try {
+        const [compRes, resRes] = await Promise.all([
+          fetch('/api/company'),
+          fetch('/api/resources')
+        ]);
+        const compData = await compRes.json();
+        const resData = await resRes.json();
+        setCompaniesCount(compData.length || 0);
+        setResourcesCount(resData.length || 0);
+      } catch (err) {
+        console.error('Failed to load counts:', err);
+      }
+    };
+
     fetchAnalytics();
+    fetchCounts();
   }, []);
 
   return (
@@ -84,6 +103,22 @@ const Dashboard = () => {
             <h2 className="analytics-value">
               {analytics.totalQuizzes > 0 ? `${analytics.latestScore}%` : 'N/A'}
             </h2>
+          </div>
+        </div>
+
+        <div className="analytics-card glass-card">
+          <div className="analytics-icon">🏢</div>
+          <div className="analytics-content">
+            <span className="analytics-label">Companies Available</span>
+            <h2 className="analytics-value">{companiesCount}</h2>
+          </div>
+        </div>
+
+        <div className="analytics-card glass-card">
+          <div className="analytics-icon">📚</div>
+          <div className="analytics-content">
+            <span className="analytics-label">Resources Available</span>
+            <h2 className="analytics-value">{resourcesCount}</h2>
           </div>
         </div>
       </div>
