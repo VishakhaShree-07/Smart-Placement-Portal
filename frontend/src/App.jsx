@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -9,21 +10,32 @@ import Companies from './pages/Companies';
 import CompanyDetails from './pages/CompanyDetails';
 import Resources from './pages/Resources';
 import ProtectedRoute from './components/ProtectedRoute';
+import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 
 function Navigation() {
   const { user, logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <header className="navbar">
-      <NavLink to="/" className="nav-logo">
+      <NavLink to="/" className="nav-logo" onClick={closeMenu}>
         🎓 Smart<span>Placement</span>
       </NavLink>
-      <nav className="nav-links">
+      
+      <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
+        {isMobileMenuOpen ? '✕' : '☰'}
+      </button>
+
+      <nav className={`nav-links ${isMobileMenuOpen ? 'open' : ''}`}>
         <NavLink 
           to="/" 
           className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          onClick={closeMenu}
         >
           Home
         </NavLink>
@@ -32,35 +44,40 @@ function Navigation() {
             <NavLink 
               to="/dashboard" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Dashboard
             </NavLink>
             <NavLink 
               to="/quiz" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Practice Quiz
             </NavLink>
             <NavLink 
               to="/history" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Quiz History
             </NavLink>
             <NavLink 
               to="/companies" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Companies
             </NavLink>
             <NavLink 
               to="/resources" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Resources
             </NavLink>
             <button 
-              onClick={logout}
+              onClick={() => { logout(); closeMenu(); }}
               className="btn btn-secondary logout-btn"
               style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
             >
@@ -72,12 +89,14 @@ function Navigation() {
             <NavLink 
               to="/login" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Login
             </NavLink>
             <NavLink 
               to="/register" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={closeMenu}
             >
               Register
             </NavLink>
@@ -107,6 +126,7 @@ function AppContent() {
           </Route>
         </Routes>
       </main>
+      <Footer />
     </Router>
   );
 }

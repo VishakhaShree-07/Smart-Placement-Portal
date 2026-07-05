@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#047BD5" rx="20"/>
+  <text x="50%" y="50%" fill="#fff" font-family="Arial" font-weight="bold" font-size="40" text-anchor="middle" dominant-baseline="middle">Flipkart</text>
+  <path d="M100 130 c -10 20 -30 20 -40 10" fill="none" stroke="#FFE11B" stroke-width="8" stroke-linecap="round"/>
+</svg>

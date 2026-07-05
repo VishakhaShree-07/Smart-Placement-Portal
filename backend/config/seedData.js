@@ -45,7 +45,7 @@ const companiesData = [
   },
   {
     name: 'Flipkart',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/07/Flipkart_logo.png',
+    logo: '/logos/flipkart.svg',
     package: '20-26 LPA',
     eligibility: 'B.Tech CSE with 7.5+ CGPA',
     skillsRequired: ['DSA', 'Machine Coding', 'System Design'],
@@ -55,7 +55,7 @@ const companiesData = [
   },
   {
     name: 'TCS',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg',
+    logo: '/logos/tcs.svg',
     package: '3.3-7 LPA',
     eligibility: 'B.Tech with 60% throughout',
     skillsRequired: ['Aptitude', 'C', 'Java', 'Python', 'Basic DSA'],

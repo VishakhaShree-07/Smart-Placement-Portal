@@ -49,12 +49,12 @@ const Companies = () => {
         <div className="dashboard-grid">
           {companies.map((company) => (
             <Link to={`/companies/${company._id}`} key={company._id} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className="dashboard-card glass-card" style={{ transition: 'transform 0.3s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div className="dashboard-card glass-card">
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
                   {company.logo && (
                     <img src={company.logo} alt={company.name} style={{ width: '50px', height: '50px', objectFit: 'contain', marginRight: '1rem', background: '#fff', padding: '5px', borderRadius: '8px' }} />
                   )}
-                  <h3 style={{ margin: 0, fontSize: '1.5rem' }}>{company.name}</h3>
+                  <h3 style={{ margin: 0, fontSize: '1.5rem', borderBottom: 'none', paddingBottom: 0 }}>{company.name}</h3>
                 </div>
                 
                 <div className="profile-detail">

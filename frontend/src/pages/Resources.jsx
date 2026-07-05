@@ -27,7 +27,6 @@ const Resources = () => {
     );
   }
 
-  // Group resources by category
   const groupedResources = resources.reduce((acc, resource) => {
     if (!acc[resource.category]) {
       acc[resource.category] = [];
@@ -62,16 +61,13 @@ const Resources = () => {
               </h2>
               <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
                 {categoryResources.map(resource => (
-                  <div key={resource._id} style={{ 
-                    background: 'rgba(255,255,255,0.03)', 
-                    border: '1px solid rgba(255,255,255,0.05)',
+                  <div key={resource._id} className="glass-card" style={{ 
                     padding: '1.5rem', 
-                    borderRadius: '12px',
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%'
                   }}>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{resource.title}</h3>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', borderBottom: 'none' }}>{resource.title}</h3>
                     <p style={{ color: '#a0a0a0', fontSize: '0.9rem', marginBottom: '1.5rem', flexGrow: 1 }}>{resource.description}</p>
                     <a href={resource.link} target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ textAlign: 'center', padding: '0.5rem' }}>
                       Access Resource ↗
