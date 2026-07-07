@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL;
 const Quiz = () => {
   const navigate = useNavigate();
 
@@ -21,7 +22,11 @@ const Quiz = () => {
     setCategory(cat);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/quiz/questions?category=${cat}`, {
+      const res = await fetch(`${API_URL}/api/quiz/questions?category=${cat}`, {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+});
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -76,7 +81,17 @@ const Quiz = () => {
     setError(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/quiz/submit', {
+      const res = await fetch(`${API_URL}/api/quiz/submit`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify({
+    category,
+    answers
+  })
+});
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+const API_URL = import.meta.env.VITE_API_URL;
 const QuizHistory = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ const QuizHistory = () => {
     const fetchHistory = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('/api/quiz/history', {
+        const res = await fetch(`${API_URL}/api/quiz/history`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
