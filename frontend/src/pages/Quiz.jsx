@@ -1,56 +1,41 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+const fetchQuestions = async (cat) => {
+  setLoading(true);
+  setError(null);
+  setCategory(cat);
 
-const API_URL = import.meta.env.VITE_API_URL;
-const Quiz = () => {
-  const navigate = useNavigate();
+  try {
+    const token = localStorage.getItem('token');
 
-  const [category, setCategory] = useState(null);
-  const [questions, setQuestions] = useState([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [selectedOption, setSelectedOption] = useState('');
-  
-  const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-  const [result, setResult] = useState(null);
-
-  const fetchQuestions = async (cat) => {
-    setLoading(true);
-    setError(null);
-    setCategory(cat);
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${API_URL}/api/quiz/questions?category=${cat}`, {
-  headers: {
-    'Authorization': `Bearer ${token}`
-  }
-});
+    const res = await fetch(
+      `${API_URL}/api/quiz/questions?category=${cat}`,
+      {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
-      });
-      const data = await res.json();
-      if (res.ok && data.status === 'success') {
-        if (data.data.questions.length === 0) {
-          setError('No questions found in this category.');
-        } else {
-          setQuestions(data.data.questions);
-          setCurrentIdx(0);
-          setAnswers({});
-          setSelectedOption('');
-          setResult(null);
-        }
-      } else {
-        setError(data.message || 'Failed to load questions.');
       }
-    } catch {
-      setError('Network error. Please try again.');
-    } finally {
-      setLoading(false);
+    );
+
+    const data = await res.json();
+
+    if (res.ok && data.status === 'success') {
+      if (data.data.questions.length === 0) {
+        setError('No questions found in this category.');
+      } else {
+        setQuestions(data.data.questions);
+        setCurrentIdx(0);
+        setAnswers({});
+        setSelectedOption('');
+        setResult(null);
+      }
+    } else {
+      setError(data.message || 'Failed to load questions.');
     }
-  };
+  } catch {
+    setError('Network error. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -76,44 +61,41 @@ const Quiz = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    setSubmitting(true);
-    setError(null);
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${API_URL}/api/quiz/submit`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  },
-  body: JSON.stringify({
-    category,
-    answers
-  })
-});
+ const handleSubmit = async () => {
+  setSubmitting(true);
+  setError(null);
+
+  try {
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(
+      `${API_URL}/api/quiz/submit`,
+      {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           category,
           answers
         })
-      });
-      const data = await res.json();
-      if (res.ok && data.status === 'success') {
-        setResult(data.data.result);
-      } else {
-        setError(data.message || 'Failed to submit quiz.');
       }
-    } catch {
-      setError('Network error. Please try again.');
-    } finally {
-      setSubmitting(false);
+    );
+
+    const data = await res.json();
+
+    if (res.ok && data.status === 'success') {
+      setResult(data.data.result);
+    } else {
+      setError(data.message || 'Failed to submit quiz.');
     }
-  };
+  } catch {
+    setError('Network error. Please try again.');
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   const getFeedbackMessage = (pct) => {
     if (pct === 100) return 'Perfect Score! You are fully prepared for top-tier tech placements.';
