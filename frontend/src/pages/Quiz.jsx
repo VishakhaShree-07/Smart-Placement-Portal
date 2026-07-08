@@ -1,3 +1,20 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+const Quiz = () => {
+  const navigate = useNavigate();
+
+  const [category, setCategory] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [answers, setAnswers] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 const fetchQuestions = async (cat) => {
   setLoading(true);
   setError(null);
@@ -190,8 +207,8 @@ const fetchQuestions = async (cat) => {
           )}
 
           <div style={{ minHeight: '320px', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#ffffff', marginBottom: '2rem', lineHeight: 1.4 }}>
-              {q.question}
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#1f2937', marginBottom: '2rem', lineHeight: 1.4 }}>
+
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flexGrow: 1, marginBottom: '2rem' }}>
@@ -206,12 +223,16 @@ const fetchQuestions = async (cat) => {
                       textAlign: 'left',
                       padding: '1.1rem 1.5rem',
                       cursor: 'pointer',
-                      border: isSelected ? '1px solid hsl(var(--primary-hover))' : '1px solid rgba(255, 255, 255, 0.08)',
-                      background: isSelected ? 'rgba(168, 85, 247, 0.08)' : 'rgba(255, 255, 255, 0.03)',
+                      border: isSelected
+                      ? '2px solid #7c3aed'
+                      : '1px solid #d1d5db',
+                      background: isSelected
+                       ? '#7c3aed'
+                       : '#ffffff',
                       boxShadow: isSelected ? '0 0 0 2px hsla(263, 70%, 50%, 0.25)' : 'none',
                       transition: 'all 0.2s ease-in-out',
                       borderRadius: 'calc(var(--radius) - 2px)',
-                      color: isSelected ? '#ffffff' : 'hsl(var(--muted))'
+                      color: isSelected ? '#ffffff' : '#1f2937'
                     }}
                   >
                     <span style={{
