@@ -207,10 +207,18 @@ const fetchQuestions = async (cat) => {
           )}
 
           <div style={{ minHeight: '320px', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#1f2937', marginBottom: '2rem', lineHeight: 1.4 }}>
-
-            </h3>
-
+            
+          <h3
+  style={{
+    fontSize: '1.4rem',
+    fontWeight: 600,
+    color: '#1f2937',
+    marginBottom: '2rem',
+    lineHeight: 1.4
+  }}
+>
+  {q.question}
+</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flexGrow: 1, marginBottom: '2rem' }}>
               {q.options.map((option, index) => {
                 const isSelected = selectedOption === option;
@@ -232,7 +240,7 @@ const fetchQuestions = async (cat) => {
                       boxShadow: isSelected ? '0 0 0 2px hsla(263, 70%, 50%, 0.25)' : 'none',
                       transition: 'all 0.2s ease-in-out',
                       borderRadius: 'calc(var(--radius) - 2px)',
-                      color: isSelected ? '#ffffff' : '#1f2937'
+                      color: isSelected ? '#000000' : '#1f2937'
                     }}
                   >
                     <span style={{
